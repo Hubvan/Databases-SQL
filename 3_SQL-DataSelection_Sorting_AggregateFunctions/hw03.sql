@@ -74,35 +74,3 @@ SELECT post
 FROM staff
 GROUP BY post
 HAVING AVG(age) <= 30; -- если строго < ничего не показывает
-
--- 7.1* Внутри каждой должности вывести ТОП-2 по ЗП (2 самых высокооплачиваемых сотрудника по ЗП внутри каждой должности)
--- у коллеги с работы спросил =))
-SELECT *
-FROM (
-  SELECT *,
-         ROW_NUMBER() OVER(PARTITION BY post ORDER BY salary DESC) AS top_rank
-  FROM staff
-) AS ranked_staff
-WHERE top_rank <= 2;
-
--- 7.2* Внутри каждой должности вывести ТОП-2 по ЗП (2 самых высокооплачиваемых сотрудника по ЗП внутри каждой должности)
--- нашел такое еще =))
-SELECT s1.*
-FROM staff s1
-WHERE (
-  SELECT COUNT(*)
-  FROM staff s2
-  WHERE s2.post = s1.post AND s2.salary >= s1.salary
-) <= 2;
-
--- 7.3* Внутри каждой должности вывести ТОП-2 по ЗП (2 самых высокооплачиваемых сотрудника по ЗП внутри каждой должности)
--- с запросом и джойном =))
-SELECT s1.*
-FROM staff s1
-left join (
-			 SELECT post, max(salary) salary, COUNT(*) CountValues
-			FROM staff s2
-            GROUP BY post
-) s2 ON s2.post = s1.post AND s2.salary >= s1.salary
-WHERE CountValues <= 2
-

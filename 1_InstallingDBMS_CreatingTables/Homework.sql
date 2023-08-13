@@ -30,7 +30,7 @@ FROM mobile_phones
 WHERE product_count > 2; 
 
 /*
-Выведите весь ассортимент товаров марки “Samsung”
+3. Выведите весь ассортимент товаров марки “Samsung”
 */
 
 SELECT *
